@@ -10,6 +10,7 @@ import {PostModule} from './post.module';
 })
 export class AppComponent implements OnInit{
   loadedPosts: PostModule[] = [];
+  isFatching = false;
 
   constructor(private http: HttpClient) {
   }
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit{
   onClearPosts(){}
 
   private fetchPosts(){
+    this.isFatching = true;
     this.http
       .get<{ [key: string]: PostModule }>('https://ng-complete-guide-9309e.firebaseio.com/posts.json')
       .pipe(map(responseData => {
@@ -51,6 +53,7 @@ export class AppComponent implements OnInit{
         })
       )
       .subscribe(posts => {
+        this.isFatching = false;
         this.loadedPosts = posts;
       });
   }
